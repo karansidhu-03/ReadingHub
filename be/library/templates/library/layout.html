@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BookTracker{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% block script %}
+    {% endblock %}
+    
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+    <header class="bg-indigo-600 text-white">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold"><a href="/">ReadingHub</a></h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a href="/" class="hover:text-gray-300">Home</a></li>
+                    <li><a href="/library/" class="hover:text-gray-300">Library</a></li>
+                    <li><a href="/add/" class="hover:text-gray-300">Add Book</a></li>
+                    <li><a href="/goals/" class="hover:text-gray-300">Reading Goals</a></li>
+                    <li><a href="/wishlist/" class="hover:text-gray-300">Wishlist</a></li>
+                    <li><a href="/about/" class="hover:text-gray-300">About</a></li>
+                    <li><a href="/account/" class="hover:text-gray-300">Account</a></li>
+                </ul>
+            </nav>
+        </div>
+  
+    </header>
+
+    <main class="container mx-auto px-4 py-6">
+        {% block content %}
+        {% endblock %}
+    </main> 
+
+    <footer class="bg-gray-800 text-white py-4 mt-6">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 ReadingHub. All rights reserved.</p>
+            <p class="text-sm">Built with Python, Django, and Tailwind CSS</p>
+        </div>
+    </footer>
+</body>
+
+</html>

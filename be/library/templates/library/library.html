@@ -1,0 +1,61 @@
+{% extends "library/layout.html" %}
+
+{% block title %}My Library - ReadingHub{% endblock %}
+{% block content %}
+<div class="container mx-auto p-4">
+    <h2 class="text-3xl font-bold text-center mb-4">Library</h2>
+
+    <!-- Search Bar -->
+    <div class="mb-4">
+        <input type="text" id="searchInput" onkeyup="searchBooks()" placeholder="Search for books..."
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2">
+    </div>
+    <div id="noBooksMessage" class="text-center text-red-500 hidden mb-4">No books found.</div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="bookList">
+        {% for book in books %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden book-item">
+            <img src="{{ book.cover_image }}" alt="Cover image of {{ book.title }}"
+                class="h-64 w-48 object-contain mb-4 mx-auto">
+            <div class="p-4">
+                <h3 class="text-xl font-semibold">{{ book.title }}</h3>
+                <p class="text-gray-600">by {{ book.author }}</p>
+                <p class="mt-2 text-gray-700">{{ book.description|truncatewords:20 }}</p>
+                <p class="mt-2"><strong>Genre:</strong> {{ book.genre }}</p>
+                <p class="mt-2"><strong>Publication Date:</strong> {{ book.publication_date }}</p>
+                <p class="mt-2"><strong>Rating:</strong> {{ book.rating }} ★</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+    function searchBooks() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const bookList = document.getElementById('bookList');
+        const books = bookList.getElementsByClassName('book-item');
+        const noBooksMessage = document.getElementById('noBooksMessage');
+
+        let found = false; // Flag to check if any book is found
+
+        for (let i = 0; i < books.length; i++) {
+            const title = books[i].getElementsByTagName('h3')[0].textContent.toLowerCase();
+            const author = books[i].getElementsByTagName('p')[0].textContent.toLowerCase(); // Assuming author is the first paragraph
+
+            if (title.includes(filter) || author.includes(filter)) {
+                books[i].style.display = ""; // Show the book item
+                found = true; // Set found to true if a book matches
+            } else {
+                books[i].style.display = "none"; // Hide the book item
+            }
+        }
+
+        // Show or hide the "No books found" message
+        if (found) {
+            noBooksMessage.classList.add('hidden'); // Hide the message if books are found
+        } else {
+            noBooksMessage.classList.remove('hidden'); // Show the message if no books are found
+        }
+    }
+</script>
+{% endblock %}

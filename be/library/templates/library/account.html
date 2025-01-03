@@ -1,0 +1,54 @@
+{% extends "library/layout.html" %}
+
+{% block title %}My Account - ReadingHub{% endblock %}
+{% block content %}
+<div class="container mx-auto p-6">
+    <h2 class="text-4xl font-bold text-center mb-6 text-gray-800">My Account</h2>
+
+    <div class="bg-white p-8 rounded-lg shadow-lg">
+        <form method="POST" action="{% url 'account' %}" class="mb-6">
+            {% csrf_token %}
+            <div class="mb-6">
+                <label for="username" class="block text-gray-700 font-semibold">Username:</label>
+                <input type="text" name="username" id="username" value="{{ user.username }}"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:border-blue-500 p-2"
+                    required>
+            </div>
+
+            <div class="mb-6">
+                <label for="bio" class="block text-gray-700 font-semibold">Bio:</label>
+                <textarea name="bio" id="bio" rows="4"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:border-blue-500 p-2">{{ user.userprofile.bio }}</textarea>
+            </div>
+
+            <div class="mb-6">
+                <label for="password" class="block text-gray-700 font-semibold">Change Password:</label>
+                <input type="password" name="password" id="password"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:border-blue-500 p-2"
+                    placeholder="Leave blank to keep current password">
+            </div>
+
+            <div class="flex justify-center">
+                <button type="submit"
+                    class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-200">Update
+                    Profile</button>
+            </div>
+        </form>
+
+        <div class="flex justify-center mt-6">
+            <form method="POST" action="{% url 'delete_account' %}">
+                {% csrf_token %}
+                <button type="submit"
+                    class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition duration-200">Delete
+                    Account</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="flex justify-center mt-6">
+        <a href="{% url 'index' %}"
+            class="bg-gray-300 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-400 transition duration-200">Back to
+            Home</a>
+    </div>
+</div>
+{% endblock %}

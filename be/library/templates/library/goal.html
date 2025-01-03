@@ -1,0 +1,126 @@
+{% extends "library/layout.html" %}
+
+{% block title %}Dashboard - ReadingHub{% endblock %}
+{% block content %}
+<div class="container mx-auto p-4">
+    <h2 class="text-3xl font-bold text-center mb-4">Welcome to Your Dashboard</h2>
+    <p class="text-gray-700 text-center mb-6">Track your reading progress and set your goals!</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-2xl mb-3">Set Your Reading Goals</h3>
+            <form id="goal-form">
+                <div class="mb-4">
+                    <label for="goal" class="block text-gray-700">Books to Read This Year:</label>
+                    <input type="number" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" id="goal"
+                        placeholder="Enter your goal" required>
+                </div>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Update Goal</button>
+            </form>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-2xl mb-3">Your Progress</h3>
+            <p id="progress-text" class="text-lg">You have read <strong>0</strong> books this year.</p>
+        </div>
+    </div>
+
+    <div class="mt-6 flex flex-col md:flex-row md:justify-between">
+        <div class="w-full md:w-1/2 p-2">
+            <h3 class="text-2xl mb-3">Reading Progress Chart</h3>
+            <canvas id="progressChart" class="w-full" style="height: 200px;"></canvas> <!-- Fixed height -->
+        </div>
+
+        <div class="w-full md:w-1/2 p-2">
+            <h3 class="text-2xl mb-3">Books Read Per Month</h3>
+            <canvas id="monthlyChart" class="w-full" style="height: 200px;"></canvas> <!-- Fixed height -->
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Example data for charts
+    const progressCtx = document.getElementById('progressChart').getContext('2d');
+    const progressChart = new Chart(progressCtx, {
+        type: 'doughnut', // Change to 'doughnut' for a circle chart
+        data: {
+            labels: ['Books Read', 'Books Remaining'],
+            datasets: [{
+                label: 'Reading Progress',
+                data: [3, 5], // Example data: 3 books read, 5 books remaining
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.6)', // Color for books read
+                    'rgba(255, 99, 132, 0.6)'  // Color for books remaining
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // Allow the chart to adjust its height
+            animation: {
+                duration: 0 // Disable animation to prevent movement
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        boxWidth: 12, // Adjust the size of the legend box
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+    const monthlyChart = new Chart(monthlyCtx, {
+        type: 'doughnut', // Change to 'doughnut' for a circle chart
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+            datasets: [{
+                label: 'Books Read Per Month',
+                data: [1, 2, 3, 4, 5, 6], // Example data for each month
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)'
+                ],
+                borderWidth: 1
+            }]
+        },
+         options: {
+            responsive: true,
+            maintainAspectRatio: false, // Allow the chart to adjust its height
+            animation: {
+                duration: 0 // Disable animation to prevent movement
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        boxWidth: 12, // Adjust the size of the legend box
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
