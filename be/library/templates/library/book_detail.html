@@ -30,10 +30,16 @@
                 <label class="block text-gray-700">Rating:</label>
                 <p class="mt-1 text-gray-600">{{ book.rating }} ★</p>
             </div>
+
+            {% if request.user.is_authenticated %}
             <form method="POST" action="{% url 'add_to_wishlist' book.id %}">
                 {% csrf_token %}
                 <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Add to Wishlist</button>
             </form>
+            {% else %}
+            <p class="mt-4 text-gray-600">Please <a href="{% url 'login' %}" class="text-blue-500 underline">log in</a> to start
+                reading.</p>
+            {% endif %}
         </div>
     </div>
 

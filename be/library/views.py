@@ -19,6 +19,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            messages.success(request, "Logged in successfully")
             return redirect("index")
         else:
             messages.error(request, "Invalid username or password.")
@@ -38,16 +39,22 @@ def register_view(request):
                 {"success": False, "error": "Passwords do not match."}, status=400
             )
         try:
-            User.objects.create_user(username=username, email=email, password=password)
-            return JsonResponse({"success": True})  # Return success response for AJAX
+            user = User.objects.create_user(
+                username=username, email=email, password=password
+            )
+            login(request, user)
+            messages.success(request, "Registered successfully")
+            return redirect("index")
         except Exception as e:
             return JsonResponse({"success": False, "error": str(e)}, status=400)
 
     return redirect("index")
 
 
+@login_required
 def logout_view(request):
     logout(request)
+    messages.success(request, "Logged out successfully")
     return redirect("index")
 
 
@@ -114,24 +121,21 @@ def account(request):
         bio = request.POST.get("bio")
         password = request.POST.get("password")
 
-        # Update username
         if username:
             user.username = username
             user.save()
 
-        # Update bio
         user_profile, created = UserProfile.objects.get_or_create(user=user)
         user_profile.bio = bio
         user_profile.save()
 
-        # Change password if provided
         if password:
             user.set_password(password)
             user.save()
             messages.success(
                 request, "Your password has been changed. Please log in again."
             )
-            return redirect("login")  # Redirect to login after password change
+            return redirect("login")
 
         messages.success(request, "Your profile has been updated.")
         return redirect("account")
@@ -141,7 +145,6 @@ def account(request):
 def add_book(request):
     ratings = list(range(1, 6))
     if request.method == "POST":
-        # Get data from the form
         title = request.POST.get("title")
         description = request.POST.get("description")
         author = request.POST.get("author")
@@ -150,7 +153,6 @@ def add_book(request):
         rating = request.POST.get("rating")
         cover_image = request.POST.get("cover_image")
 
-        # Create a new book instance
         new_book = Book(
             title=title,
             description=description,
@@ -161,11 +163,9 @@ def add_book(request):
             cover_image=cover_image,
         )
 
-        # Save the book to the database
         new_book.save()
 
-        # Redirect to a success page or the book list page
-        return redirect("/")  # Change 'book_list' to the name of your book list view
+        return redirect("/")
 
     return render(request, "library/add_book.html", {"ratings": ratings})
 
@@ -176,4 +176,4 @@ def delete_account(request):
         user = request.user
         user.delete()
         messages.success(request, "Your account has been deleted.")
-        return redirect("index")  # Redirect to home page after deletion
+        return redirect("index")

@@ -15,7 +15,7 @@
         {% for book in books %}
         <div class="bg-white rounded-lg shadow-md overflow-hidden book-item">
             <img src="{{ book.cover_image }}" alt="Cover image of {{ book.title }}"
-                class="h-64 w-48 object-contain mb-4 mx-auto">
+                class="h-64 w-48 object-contain mx-auto p-2">
             <div class="p-4">
                 <h3 class="text-xl font-semibold">{{ book.title }}</h3>
                 <p class="text-gray-600">by {{ book.author }}</p>
@@ -23,7 +23,13 @@
                 <p class="mt-2"><strong>Genre:</strong> {{ book.genre }}</p>
                 <p class="mt-2"><strong>Publication Date:</strong> {{ book.publication_date }}</p>
                 <p class="mt-2"><strong>Rating:</strong> {{ book.rating }} ★</p>
+                <a href="{% url 'book_detail' book.id %}"
+                    class="mt-4 inline-block bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-500">
+                    View Details
+                </a>
+                
             </div>
+           
         </div>
         {% endfor %}
     </div>
